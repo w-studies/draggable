@@ -1,0 +1,62 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  max-width: 100%;
+}
+
+body {
+  border: 2px dotted green;
+  background-color: #eee;
+  position: relative;
+}
+
+main {
+  border: 2px dashed navy;
+  width: 400px;
+  height: 500px;
+  max-height: 100%;
+  position: relative;
+}
+
+.draggable {
+  position: absolute;
+  border: thin solid navy;
+}
+
+div {
+  background-color: rgba(5, 100, 100, 0.37);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+body > div {
+  width: 50px;
+  height: 50px;
+  border-radius: 0;
+  border-color: green;
+}
+
+.another-container div:first-child {
+  height: 25px;
+  border-radius: 25px;
+  border-color: orangered;
+}
+.another-container {
+  border: 3px solid gold;
+  position: absolute;
+  width: 260px;
+  height: 356px;
+  top: calc(50% - 173px);
+  left: calc(50% - 130px);
+}
