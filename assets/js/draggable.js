@@ -54,8 +54,9 @@ export const makeDraggable = (state, el) => {
     const x = Math.min(maxX, Math.max(0, pointerX))
     const y = Math.min(maxY, Math.max(0, pointerY))
 
-    el.style.left = `${x}px`
-    el.style.top = `${y}px`
+    // el.style.left = `${x}px`
+    // el.style.top = `${y}px`
+    el.style.transform = `translate(${x}px,${y}px)`
   }
 
   el.addEventListener('pointerdown', start)
