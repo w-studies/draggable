@@ -12,29 +12,30 @@ export const makeDraggable = (state, el) => {
 
     return { x, y }
   }
+
   function start(event) {
     if (event.button !== 0) return // left button only
     event.stopPropagation() // for nested draggables
 
-    let { x, y } = event
+    el.classList.add('move')
+    el.setPointerCapture(event.pointerId)
     const container = document.querySelector(el.getAttribute('data-container'))
+
     state = {
       ...state,
-      dragging: { dx: state.pos.x - x, dy: state.pos.y - y },
-      offset: { x: x - el.getBoundingClientRect().left, y: y - el.getBoundingClientRect().top },
+      dragging: { dx: state.pos.x - event.x, dy: state.pos.y - event.y },
+      offset: {
+        x: event.x - el.getBoundingClientRect().left,
+        y: event.y - el.getBoundingClientRect().top
+      },
       container,
       containerBorderSize: getBorderSize(container)
     }
-
-    el.setPointerCapture(event.pointerId)
-    el.style.userSelect = 'none' // if there's text
-    el.style.webkitUserSelect = 'none' // safari
   }
 
   function end(event) {
     state.dragging = null
-    el.style.userSelect = '' // if there's text
-    el.style.webkitUserSelect = '' // safari
+    el.classList.remove('move')
   }
 
   function move(event) {
@@ -46,17 +47,15 @@ export const makeDraggable = (state, el) => {
     const maxX = containerRect.width - state.containerBorderSize.x - el.offsetWidth
     const maxY = containerRect.height - state.containerBorderSize.y - el.offsetHeight
 
-    const mx = event.x - state.offset.x - containerRect.left
-    const my = event.y - state.offset.y - containerRect.top
+    const pointerX = event.x - state.offset.x - containerRect.left
+    const pointerY = event.y - state.offset.y - containerRect.top
 
     // Limit the position within the container
-    const x = Math.min(maxX, Math.max(0, mx))
-    const y = Math.min(maxY, Math.max(0, my))
+    const x = Math.min(maxX, Math.max(0, pointerX))
+    const y = Math.min(maxY, Math.max(0, pointerY))
 
-    state.pos = { x, y }
-
-    el.style.left = `${state.pos.x}px`
-    el.style.top = `${state.pos.y}px`
+    el.style.left = `${x}px`
+    el.style.top = `${y}px`
   }
 
   el.addEventListener('pointerdown', start)
