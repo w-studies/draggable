@@ -20,13 +20,14 @@ export const makeDraggable = (state, el) => {
     el.classList.add('move')
     el.setPointerCapture(event.pointerId)
     const container = document.querySelector(el.getAttribute('data-container'))
+    const elBoundingRect = el.getBoundingClientRect()
 
     state = {
       ...state,
       dragging: { dx: state.pos.x - event.x, dy: state.pos.y - event.y },
       offset: {
-        x: event.x - el.getBoundingClientRect().left,
-        y: event.y - el.getBoundingClientRect().top
+        x: event.x - elBoundingRect.left,
+        y: event.y - elBoundingRect.top
       },
       container,
       containerBorderSize: getBorderSize(container)
@@ -54,8 +55,6 @@ export const makeDraggable = (state, el) => {
     const x = Math.min(maxX, Math.max(0, pointerX))
     const y = Math.min(maxY, Math.max(0, pointerY))
 
-    // el.style.left = `${x}px`
-    // el.style.top = `${y}px`
     el.style.transform = `translate(${x}px,${y}px)`
   }
 
