@@ -20,15 +20,17 @@ export const makeDraggable = (state, el) => {
     el.classList.add('move')
     el.setPointerCapture(event.pointerId)
     const container = document.querySelector(el.getAttribute('data-container'))
+    const draggableElement = document.querySelector(el.getAttribute('data-draggable'))
 
     state = {
       ...state,
       dragging: { dx: state.pos.x - event.x, dy: state.pos.y - event.y },
       offset: {
-        x: event.x - el.getBoundingClientRect().left,
-        y: event.y - el.getBoundingClientRect().top
+        x: event.x - draggableElement.getBoundingClientRect().left,
+        y: event.y - draggableElement.getBoundingClientRect().top
       },
       container,
+      draggableElement,
       containerBorderSize: getBorderSize(container)
     }
   }
@@ -44,8 +46,8 @@ export const makeDraggable = (state, el) => {
 
     const containerRect = state.container.getBoundingClientRect()
 
-    const maxX = containerRect.width - state.containerBorderSize.x - el.offsetWidth
-    const maxY = containerRect.height - state.containerBorderSize.y - el.offsetHeight
+    const maxX = containerRect.width - state.draggableElement.offsetWidth
+    const maxY = containerRect.height - state.draggableElement.offsetHeight
 
     const pointerX = event.x - state.offset.x - containerRect.left
     const pointerY = event.y - state.offset.y - containerRect.top
@@ -54,11 +56,19 @@ export const makeDraggable = (state, el) => {
     const x = Math.min(maxX, Math.max(0, pointerX))
     const y = Math.min(maxY, Math.max(0, pointerY))
 
-    // el.style.left = `${x}px`
-    // el.style.top = `${y}px`
-    el.style.transform = `translate(${x}px,${y}px)`
-  }
+    state.draggableElement.style.transform = `translate(${x}px,${y}px)`
 
+    document.querySelector('.log > p:last-child').innerHTML = JSON.stringify(
+      {
+        event: { x: event.x, y: event.y },
+        element: { x: state.offset.x, y: state.offset.y },
+        translate: `translate(${x}px,${y}px)`,
+        parent: state.draggableElement.parentNode
+      },
+      null,
+      2
+    )
+  }
   el.addEventListener('pointerdown', start)
   el.addEventListener('pointerup', end)
   el.addEventListener('pointercancel', end)

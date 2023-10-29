@@ -1,81 +1,109 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+:root {
+  --header-height: 55px;
+  --aside-width: 200px;
 }
-html,
-body {
-  margin: 0;
+
+html {
   height: 100%;
-  max-width: 100%;
 }
-
 body {
-  border: 2px dotted green;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #23282c;
+  text-align: left;
   background-color: #eee;
-  position: relative;
-}
-
-main {
-  border: 2px dashed navy;
-  width: 400px;
-  height: 500px;
-  max-height: 100%;
-  max-width: 100%;
-  position: relative;
-}
-
-.draggable {
-  position: absolute;
-  border: thin solid navy;
-}
-
-div {
-  background-color: rgba(0, 0, 128, 0.37);
-  z-index: 2;
   display: flex;
+  flex-direction: column;
+}
+div.app-stage {
+  margin-top: var(--header-height);
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  overflow-x: hidden;
+}
+.app-body {
+  margin-left: var(--aside-width);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+header.app-header,
+footer.app-footer,
+aside.sidebar,
+main {
+  transition: margin-left 0.25s, margin-right 0.25s, width 0.25s, flex 0.25s;
+}
+main {
+  flex: 1;
+  min-width: 0;
+}
+header.app-header {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  flex: 0 0 var(--header-height);
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
+  height: var(--header-height);
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  z-index: 1020;
 }
-div.move {
+aside.sidebar {
+  height: calc(100vh - var(--header-height));
+  position: fixed;
+  z-index: 1019;
+  width: var(--aside-width);
+  flex: 0 0 var(--aside-width);
+  order: -1;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  background: #2f353a;
+}
+footer.app-footer {
+  display: flex;
+  flex: 0 0 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  color: #23282c;
+  background: #fafafa;
+  border-top: 1px solid #ccc;
+}
+.move {
   cursor: grabbing;
   user-select: none;
   -webkit-user-select: none;
 }
-
-body > div.draggable {
-  width: 50px;
-  height: 50px;
-  border-radius: 0;
-  border-color: green;
-  background-color: rgba(5, 100, 100, 0.37);
+.log {
+  display: flex;
 }
-
-.another-container div:first-child {
-  height: 25px;
-  border-radius: 25px;
-  border-color: gold;
-  background-color: rgba(255, 215, 0, 0.37);
-}
-.another-container {
-  border: 3px solid gold;
-  position: absolute;
-  width: 260px;
-  height: 356px;
-  max-height: 100%;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-footer {
-  position: absolute;
-  bottom: 0;
+main .log > p {
+  font-family: monospace;
+  white-space: pre;
+  margin: 12px;
   padding: 12px;
-  background-color: rgba(205, 205, 205, 0.15);
-  user-select: none;
-  width: 100%;
-  text-align: center;
+  border-left: thin solid #eee;
+}
+main .modal-dialog {
+  min-width: 100%;
+  margin-left: var(--aside-width);
+  margin-top: var(--header-height);
+}
+
+.modal-content {
+  max-width: var(--bs-modal-width);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+}
+.modal-content:has(.modal-header.move) {
+  opacity: 0.5;
 }
