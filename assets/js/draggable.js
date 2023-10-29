@@ -75,4 +75,11 @@ export const makeDraggable = (state, el) => {
   el.addEventListener('pointermove', move)
   el.addEventListener('touchstart', (e) => e.preventDefault())
   el.addEventListener('dragstart', (e) => e.preventDefault())
+  window.addEventListener('resize', (e) => {
+    const event = { x: window.innerWidth, y: window.innerHeight, stopPropagation: () => {} }
+    state.dragging = true
+    start(event)
+    move(event)
+    state.dragging = false
+  })
 }
